@@ -10,16 +10,6 @@
 		000000000000000000000120 /* SWiproMeal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SWiproMeal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		DF502B0030AEE7FF00A6CDE0 /* Exceptions for "Views" folder in "SWiproMeal" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Main/MealsView.swift,
-			);
-			target = 000000000000000100000000 /* SWiproMeal */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DF502AD630AEE63400A6CDE0 /* App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -33,9 +23,6 @@
 		};
 		DF502AE730AEE6BA00A6CDE0 /* Views */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				DF502B0030AEE7FF00A6CDE0 /* Exceptions for "Views" folder in "SWiproMeal" target */,
-			);
 			path = Views;
 			sourceTree = "<group>";
 		};
