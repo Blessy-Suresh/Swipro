@@ -1,7 +1,8 @@
-//
-//  User.swift
-//  SWiproMeal
-//
-//  Created by KCEMAC4 on 19/11/26.
-//
+import Foundation
 
+struct UserAccount: Codable, Identifiable {
+    var id: String { email.lowercased() }
+    let name: String
+    let email: String
+    let password: String
+}

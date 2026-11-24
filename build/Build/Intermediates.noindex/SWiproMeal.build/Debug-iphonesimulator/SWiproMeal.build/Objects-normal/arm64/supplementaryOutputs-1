@@ -1,0 +1,23 @@
+{
+  "/Users/kcemac9/Desktop/Swipro/Views/Authentication/AuthenticationViews.swift" : {
+    "const-values" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/AuthenticationViews.swiftconstvalues",
+    "dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/AuthenticationViews.d",
+    "diagnostics" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/AuthenticationViews.dia",
+    "object" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/AuthenticationViews.o",
+    "swift-dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/AuthenticationViews.swiftdeps"
+  },
+  "/Users/kcemac9/Desktop/Swipro/Views/Authentication/BiometricAuthView.swift" : {
+    "const-values" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricAuthView.swiftconstvalues",
+    "dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricAuthView.d",
+    "diagnostics" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricAuthView.dia",
+    "object" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricAuthView.o",
+    "swift-dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricAuthView.swiftdeps"
+  },
+  "/Users/kcemac9/Desktop/Swipro/Views/Authentication/LoginView.swift" : {
+    "const-values" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/LoginView.swiftconstvalues",
+    "dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/LoginView.d",
+    "diagnostics" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/LoginView.dia",
+    "object" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/LoginView.o",
+    "swift-dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/LoginView.swiftdeps"
+  }
+}

@@ -1,4 +1,3 @@
-
 import Foundation
 import Combine
 
@@ -9,11 +8,27 @@ final class MealPlannerStore: ObservableObject {
 
     @Published private(set) var meals: [MealPlanItem] = []
 
-    private let storageKey = "MealMateSavedMeals"
+    private var currentUserEmail: String {
+        let email = UserDefaults.standard.string(forKey: "loggedInEmail") ??
+                    UserDefaults.standard.string(forKey: "registeredEmail") ??
+                    "default_user"
+        let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        return trimmed.isEmpty ? "default_user" : trimmed
+    }
+
+    private var storageKey: String {
+        "MealMateSavedMeals_\(currentUserEmail)"
+    }
+
+    private let legacyStorageKey = "MealMateSavedMeals"
 
     // MARK: - Initialization
 
     init() {
+        loadMeals()
+    }
+
+    func reloadForCurrentUser() {
         loadMeals()
     }
 
@@ -22,21 +37,9 @@ final class MealPlannerStore: ObservableObject {
     @discardableResult
     func addMeal(_ meal: MealPlanItem) -> Bool {
 
-        let today = Calendar.current.startOfDay(
-            for: Date()
-        )
-
-        let selectedDate = Calendar.current.startOfDay(
-            for: meal.date
-        )
-
         let cleanName = meal.dishName.trimmingCharacters(
             in: .whitespacesAndNewlines
         )
-
-        guard selectedDate >= today else {
-            return false
-        }
 
         guard !cleanName.isEmpty else {
             return false
@@ -45,6 +48,10 @@ final class MealPlannerStore: ObservableObject {
         guard meal.servings > 0 else {
             return false
         }
+
+        let selectedDate = Calendar.current.startOfDay(
+            for: meal.date
+        )
 
         var newMeal = meal
         newMeal.dishName = cleanName
@@ -80,17 +87,9 @@ final class MealPlannerStore: ObservableObject {
             return false
         }
 
-        let today = Calendar.current.startOfDay(
-            for: Date()
-        )
-
         let selectedDate = Calendar.current.startOfDay(
             for: meal.date
         )
-
-        guard selectedDate >= today else {
-            return false
-        }
 
         var updatedMeal = meal
         updatedMeal.dishName = cleanName
@@ -136,11 +135,13 @@ final class MealPlannerStore: ObservableObject {
 
     func meals(for date: Date) -> [MealPlanItem] {
 
+        let target = Calendar.current.startOfDay(for: date)
+
         return meals
             .filter {
                 Calendar.current.isDate(
                     $0.date,
-                    inSameDayAs: date
+                    inSameDayAs: target
                 )
             }
             .sorted {
@@ -154,11 +155,13 @@ final class MealPlannerStore: ObservableObject {
     func meals(forWeekContaining date: Date) -> [MealPlanItem] {
 
         var calendar = Calendar.current
-        calendar.firstWeekday = 2
+        calendar.firstWeekday = 2 // Monday
+
+        let baseDate = calendar.startOfDay(for: date)
 
         guard let interval = calendar.dateInterval(
             of: .weekOfYear,
-            for: date
+            for: baseDate
         ) else {
             return []
         }
@@ -169,7 +172,6 @@ final class MealPlannerStore: ObservableObject {
                 $0.date < interval.end
             }
             .sorted {
-
                 if $0.date == $1.date {
                     return mealOrder($0.mealType) <
                            mealOrder($1.mealType)
@@ -227,21 +229,17 @@ final class MealPlannerStore: ObservableObject {
     private func saveMeals() {
 
         do {
-
             let encoder = JSONEncoder()
-
             let data = try encoder.encode(meals)
 
-            UserDefaults.standard.set(
-                data,
-                forKey: storageKey
-            )
+            // Save to user-specific key
+            UserDefaults.standard.set(data, forKey: storageKey)
+
+            // Save to legacy key as well for redundancy
+            UserDefaults.standard.set(data, forKey: legacyStorageKey)
 
         } catch {
-
-            print(
-                "Meal saving failed: \(error.localizedDescription)"
-            )
+            print("Meal saving failed: \(error.localizedDescription)")
         }
     }
 
@@ -249,32 +247,35 @@ final class MealPlannerStore: ObservableObject {
 
     private func loadMeals() {
 
-        guard let data = UserDefaults.standard.data(
-            forKey: storageKey
-        ) else {
+        let decoder = JSONDecoder()
 
-            meals = []
-            return
+        // 1. Try user-specific storage key
+        if let data = UserDefaults.standard.data(forKey: storageKey) {
+            do {
+                let savedMeals = try decoder.decode([MealPlanItem].self, from: data)
+                if !savedMeals.isEmpty {
+                    meals = savedMeals
+                    return
+                }
+            } catch {
+                print("User meal decoding error: \(error)")
+            }
         }
 
-        do {
-
-            let decoder = JSONDecoder()
-
-            let savedMeals = try decoder.decode(
-                [MealPlanItem].self,
-                from: data
-            )
-
-            meals = savedMeals
-
-        } catch {
-
-            print(
-                "Meal loading failed: \(error.localizedDescription)"
-            )
-
-            meals = []
+        // 2. Fallback to legacy key (migrate)
+        if let legacyData = UserDefaults.standard.data(forKey: legacyStorageKey) {
+            do {
+                let savedMeals = try decoder.decode([MealPlanItem].self, from: legacyData)
+                if !savedMeals.isEmpty {
+                    meals = savedMeals
+                    saveMeals()
+                    return
+                }
+            } catch {
+                print("Legacy meal decoding error: \(error)")
+            }
         }
+
+        meals = []
     }
 }

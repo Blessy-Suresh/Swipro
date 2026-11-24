@@ -1,12 +1,13 @@
-
 import SwiftUI
 
 struct HomeView: View {
 
-    @StateObject private var viewModel = HomeViewModel()
+    @EnvironmentObject private var store: MealPlannerStore
 
     var onOpenMeals: () -> Void
     var onAddMeal: () -> Void
+
+    @State private var selectedMeal: MealPlanItem?
 
     private let purple = Color(
         red: 0.43,
@@ -25,6 +26,43 @@ struct HomeView: View {
         green: 0.97,
         blue: 0.99
     )
+
+    // Current week meals from the store
+    private var currentWeekMeals: [MealPlanItem] {
+        store.meals(forWeekContaining: Date())
+    }
+
+    private var plannedCount: Int {
+        currentWeekMeals.filter { $0.status == .planned }.count
+    }
+
+    private var cookedCount: Int {
+        currentWeekMeals.filter { $0.status == .cooked }.count
+    }
+
+    private var pendingCount: Int {
+        currentWeekMeals.filter { $0.status == .planned }.count
+    }
+
+    private var skippedCount: Int {
+        currentWeekMeals.filter { $0.status == .skipped }.count
+    }
+
+    private var totalPlanned: Int {
+        currentWeekMeals.count
+    }
+
+    private var progress: Double {
+        totalPlanned > 0 ? Double(cookedCount) / Double(totalPlanned) : 0
+    }
+
+    private var nextUpcomingMeal: MealPlanItem? {
+        let today = Calendar.current.startOfDay(for: Date())
+        return store.meals
+            .filter { $0.status == .planned && $0.date >= today }
+            .sorted { $0.date < $1.date }
+            .first
+    }
 
     var body: some View {
 
@@ -55,6 +93,11 @@ struct HomeView: View {
             }
         }
         .preferredColorScheme(.light)
+        .sheet(item: $selectedMeal) { meal in
+            NavigationStack {
+                MealDetailView(meal: meal)
+            }
+        }
     }
 
     // MARK: - Header
@@ -98,7 +141,7 @@ struct HomeView: View {
 
                 Spacer()
 
-                Text(viewModel.weekDescription)
+                Text(Date().formatted(.dateTime.month(.wide).year()))
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(purple)
             }
@@ -146,28 +189,28 @@ struct HomeView: View {
 
                 summaryCard(
                     title: "Planned Meals",
-                    value: viewModel.totalPlannedMeals,
+                    value: plannedCount,
                     icon: "calendar.badge.checkmark",
                     color: purple
                 )
 
                 summaryCard(
                     title: "Cooked",
-                    value: viewModel.cookedMeals,
+                    value: cookedCount,
                     icon: "checkmark.circle",
                     color: Color(red: 0.35, green: 0.55, blue: 0.43)
                 )
 
                 summaryCard(
                     title: "Pending",
-                    value: viewModel.pendingMeals,
+                    value: pendingCount,
                     icon: "clock",
                     color: Color(red: 0.72, green: 0.53, blue: 0.32)
                 )
 
                 summaryCard(
                     title: "Skipped",
-                    value: viewModel.skippedMeals,
+                    value: skippedCount,
                     icon: "minus.circle",
                     color: Color.gray
                 )
@@ -228,17 +271,17 @@ struct HomeView: View {
 
                 Spacer()
 
-                Text("\(Int(viewModel.progress * 100))%")
+                Text("\(Int(progress * 100))%")
                     .font(.system(size: 15, weight: .bold))
                     .foregroundColor(purple)
             }
 
-            ProgressView(value: viewModel.progress)
+            ProgressView(value: progress)
                 .tint(purple)
                 .scaleEffect(x: 1, y: 1.5, anchor: .center)
 
             Text(
-                "\(viewModel.cookedMeals) of \(viewModel.totalPlannedMeals) planned meals cooked"
+                "\(cookedCount) of \(totalPlanned) planned meals cooked this week"
             )
             .font(.system(size: 12))
             .foregroundColor(.secondary)
@@ -268,51 +311,62 @@ struct HomeView: View {
                 .foregroundColor(purple)
             }
 
-            if let meal = viewModel.nextUpcomingMeal {
+            if let meal = nextUpcomingMeal {
 
-                VStack(alignment: .leading, spacing: 10) {
+                Button {
+                    selectedMeal = meal
+                } label: {
 
-                    HStack(spacing: 13) {
+                    VStack(alignment: .leading, spacing: 10) {
 
-                        Image(systemName: "fork.knife.circle.fill")
-                            .font(.system(size: 40))
-                            .foregroundColor(purple)
+                        HStack(spacing: 13) {
 
-                        VStack(alignment: .leading, spacing: 5) {
+                            Image(systemName: "fork.knife.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundColor(purple)
 
-                            Text(meal.name)
-                                .font(.system(size: 16, weight: .semibold))
+                            VStack(alignment: .leading, spacing: 5) {
 
-                            Text(meal.mealType)
-                                .font(.system(size: 12))
+                                Text(meal.dishName)
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(.primary)
+
+                                Text(meal.mealType)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+
+                                Text(meal.date.formatted(
+                                    date: .abbreviated,
+                                    time: .omitted
+                                ))
+                                .font(.system(size: 11))
+                                .foregroundColor(purple)
+                            }
+
+                            Spacer()
+
+                            Text(meal.status.rawValue)
+                                .font(.system(size: 10, weight: .semibold))
+                                .foregroundColor(purple)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(lavender)
+                                .clipShape(Capsule())
+
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 12, weight: .semibold))
                                 .foregroundColor(.secondary)
-
-                            Text(meal.date.formatted(
-                                date: .abbreviated,
-                                time: .shortened
-                            ))
-                            .font(.system(size: 11))
-                            .foregroundColor(purple)
                         }
 
-                        Spacer()
-
-                        Text("Planned")
-                            .font(.system(size: 10, weight: .semibold))
-                            .foregroundColor(purple)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .background(lavender)
-                            .clipShape(Capsule())
+                        Text("\(meal.servings) servings")
+                            .font(.system(size: 12))
+                            .foregroundColor(.secondary)
                     }
-
-                    Text("\(meal.calories) kcal")
-                        .font(.system(size: 12))
-                        .foregroundColor(.secondary)
+                    .padding(16)
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 17))
                 }
-                .padding(16)
-                .background(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: 17))
+                .buttonStyle(.plain)
 
             } else {
 

@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct MealDetailView: View {
@@ -8,10 +7,18 @@ struct MealDetailView: View {
 
     let meal: MealPlanItem
 
+    @State private var showingEdit = false
+
     private let purple = Color(
         red: 0.43,
         green: 0.32,
         blue: 0.60
+    )
+
+    private let lavender = Color(
+        red: 0.95,
+        green: 0.92,
+        blue: 0.98
     )
 
     private var currentMeal: MealPlanItem {
@@ -81,8 +88,10 @@ struct MealDetailView: View {
                                 .tag(status)
                         }
                     }
-                    .pickerStyle(.menu)
-                    .tint(purple)
+                    .pickerStyle(.segmented)
+                    .padding(4)
+                    .background(lavender)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
                 .padding()
                 .background(Color.white)
@@ -106,6 +115,21 @@ struct MealDetailView: View {
                 .background(Color.white)
                 .clipShape(RoundedRectangle(cornerRadius: 13))
 
+                // Edit Button
+                Button {
+                    showingEdit = true
+                } label: {
+
+                    Label("Edit Meal", systemImage: "pencil")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(purple)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+
+                // Delete Button
                 Button(role: .destructive) {
 
                     store.deleteMeal(meal)
@@ -117,9 +141,11 @@ struct MealDetailView: View {
                         "Delete Meal",
                         systemImage: "trash"
                     )
+                    .font(.subheadline.weight(.medium))
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.red.opacity(0.08))
+                    .foregroundColor(.red)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
@@ -135,6 +161,31 @@ struct MealDetailView: View {
         )
         .navigationTitle("Meal Details")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                        Text("Back")
+                    }
+                    .foregroundColor(purple)
+                }
+            }
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showingEdit = true
+                } label: {
+                    Label("Edit", systemImage: "pencil")
+                        .foregroundColor(purple)
+                }
+            }
+        }
+        .sheet(isPresented: $showingEdit) {
+            EditMealView(meal: currentMeal)
+        }
     }
 
     private var mealImage: some View {

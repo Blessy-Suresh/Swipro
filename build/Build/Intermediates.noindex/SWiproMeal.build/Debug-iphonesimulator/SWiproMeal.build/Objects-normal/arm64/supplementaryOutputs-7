@@ -1,0 +1,23 @@
+{
+  "/Users/kcemac9/Desktop/Swipro/Services/BiometricService.swift" : {
+    "const-values" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricService.swiftconstvalues",
+    "dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricService.d",
+    "diagnostics" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricService.dia",
+    "object" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricService.o",
+    "swift-dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/BiometricService.swiftdeps"
+  },
+  "/Users/kcemac9/Desktop/Swipro/Services/MealPlannerStore.swift" : {
+    "const-values" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealPlannerStore.swiftconstvalues",
+    "dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealPlannerStore.d",
+    "diagnostics" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealPlannerStore.dia",
+    "object" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealPlannerStore.o",
+    "swift-dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealPlannerStore.swiftdeps"
+  },
+  "/Users/kcemac9/Desktop/Swipro/Services/MealService.swift" : {
+    "const-values" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealService.swiftconstvalues",
+    "dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealService.d",
+    "diagnostics" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealService.dia",
+    "object" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealService.o",
+    "swift-dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealService.swiftdeps"
+  }
+}

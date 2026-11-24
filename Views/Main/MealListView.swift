@@ -1,4 +1,3 @@
-
 import SwiftUI
 import UIKit
 
@@ -8,9 +7,14 @@ struct MealListView: View {
 
     @State private var searchText = ""
     @State private var selectedMeal: MealPlanItem?
+    @State private var mealToEdit: MealPlanItem?
 
     private let purple = Color(
         red: 0.43, green: 0.32, blue: 0.60
+    )
+
+    private let lavender = Color(
+        red: 0.95, green: 0.92, blue: 0.98
     )
 
     private var filteredMeals: [MealPlanItem] {
@@ -64,8 +68,12 @@ struct MealListView: View {
                         Spacer()
 
                         Text("\(filteredMeals.count) meals")
-                            .font(.system(size: 12, weight: .medium))
+                            .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(purple)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(lavender)
+                            .clipShape(Capsule())
                     }
 
                     if filteredMeals.isEmpty {
@@ -111,6 +119,9 @@ struct MealListView: View {
                     MealDetailView(meal: meal)
                 }
             }
+            .sheet(item: $mealToEdit) { meal in
+                EditMealView(meal: meal)
+            }
         }
     }
 
@@ -151,9 +162,7 @@ struct MealListView: View {
                             .font(.system(size: 23))
                             .foregroundColor(purple)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(
-                                Color(red: 0.95, green: 0.92, blue: 0.98)
-                            )
+                            .background(lavender)
                     }
                 }
                 .frame(width: 68, height: 68)
@@ -180,6 +189,16 @@ struct MealListView: View {
 
                 Spacer()
 
+                // Direct edit button
+                Button {
+                    mealToEdit = meal
+                } label: {
+                    Image(systemName: "pencil.circle.fill")
+                        .font(.system(size: 22))
+                        .foregroundColor(purple)
+                }
+                .buttonStyle(.borderless)
+
                 Image(systemName: "chevron.right")
                     .foregroundColor(.secondary)
                     .font(.caption)
@@ -189,6 +208,19 @@ struct MealListView: View {
             .clipShape(RoundedRectangle(cornerRadius: 13))
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            Button {
+                mealToEdit = meal
+            } label: {
+                Label("Edit Meal", systemImage: "pencil")
+            }
+
+            Button(role: .destructive) {
+                store.deleteMeal(meal)
+            } label: {
+                Label("Delete Meal", systemImage: "trash")
+            }
+        }
     }
 
     // MARK: Empty State

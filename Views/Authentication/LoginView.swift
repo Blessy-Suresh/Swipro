@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct LoginView: View {
@@ -25,7 +24,7 @@ struct LoginView: View {
             Text("Welcome back to MealMate")
                 .foregroundColor(.secondary)
 
-            TextField("Email Address", text: $viewModel.email)
+            TextField("Email or Username", text: $viewModel.email)
                 .keyboardType(.emailAddress)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/kcemac9/Desktop/Swipro/Views/Authentication/BiometricAuthView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Login with Face ID",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 14
+        }
+      }
+    ]
+  },
+  "version": 1
+}

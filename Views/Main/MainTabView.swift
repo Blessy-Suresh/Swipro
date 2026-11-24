@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct MainTabView: View {
@@ -56,5 +55,8 @@ struct MainTabView: View {
         }
         .tint(purple)
         .environmentObject(mealStore)
+        .onAppear {
+            mealStore.reloadForCurrentUser()
+        }
     }
 }

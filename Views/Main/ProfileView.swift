@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct ProfileView: View {
@@ -9,6 +8,9 @@ struct ProfileView: View {
     @AppStorage("registeredEmail")
     private var registeredEmail = ""
 
+    @AppStorage("loggedInEmail")
+    private var loggedInEmail = ""
+
     @AppStorage("isLoggedIn")
     private var isLoggedIn = false
 
@@ -17,6 +19,13 @@ struct ProfileView: View {
         green: 0.32,
         blue: 0.60
     )
+
+    private var displayEmail: String {
+        if !loggedInEmail.isEmpty {
+            return loggedInEmail
+        }
+        return registeredEmail
+    }
 
     var body: some View {
 
@@ -39,7 +48,7 @@ struct ProfileView: View {
                         )
                         .font(.title2.bold())
 
-                        Text(registeredEmail)
+                        Text(displayEmail)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -121,4 +130,3 @@ struct ProfileView: View {
         .padding(17)
     }
 }
-

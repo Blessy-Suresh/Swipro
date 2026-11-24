@@ -1,0 +1,23 @@
+{
+  "/Users/kcemac9/Desktop/Swipro/Views/Main/MealsView.swift" : {
+    "const-values" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealsView.swiftconstvalues",
+    "dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealsView.d",
+    "diagnostics" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealsView.dia",
+    "object" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealsView.o",
+    "swift-dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/MealsView.swiftdeps"
+  },
+  "/Users/kcemac9/Desktop/Swipro/Views/Main/ProfileView.swift" : {
+    "const-values" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/ProfileView.swiftconstvalues",
+    "dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/ProfileView.d",
+    "diagnostics" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/ProfileView.dia",
+    "object" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/ProfileView.o",
+    "swift-dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/ProfileView.swiftdeps"
+  },
+  "/Users/kcemac9/Desktop/Swipro/Views/MealDetails/EditMealView.swift" : {
+    "const-values" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/EditMealView.swiftconstvalues",
+    "dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/EditMealView.d",
+    "diagnostics" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/EditMealView.dia",
+    "object" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/EditMealView.o",
+    "swift-dependencies" : "/Users/kcemac9/Desktop/Swipro/build/Build/Intermediates.noindex/SWiproMeal.build/Debug-iphonesimulator/SWiproMeal.build/Objects-normal/arm64/EditMealView.swiftdeps"
+  }
+}
