@@ -8,6 +8,7 @@ struct MealDetailView: View {
     let meal: MealPlanItem
 
     @State private var showingEdit = false
+    @State private var showingDeleteAlert = false
 
     private let purple = Color(
         red: 0.43,
@@ -115,26 +116,9 @@ struct MealDetailView: View {
                 .background(Color.white)
                 .clipShape(RoundedRectangle(cornerRadius: 13))
 
-                // Edit Button
-                Button {
-                    showingEdit = true
-                } label: {
-
-                    Label("Edit Meal", systemImage: "pencil")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(purple)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
-
                 // Delete Button
                 Button(role: .destructive) {
-
-                    store.deleteMeal(meal)
-                    dismiss()
-
+                    showingDeleteAlert = true
                 } label: {
 
                     Label(
@@ -150,6 +134,18 @@ struct MealDetailView: View {
                 }
             }
             .padding(20)
+        }
+        .alert(
+            "Delete Meal?",
+            isPresented: $showingDeleteAlert
+        ) {
+            Button("Delete", role: .destructive) {
+                store.deleteMeal(meal)
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Are you sure you want to delete this meal?")
         }
         .background(
             Color(
@@ -178,40 +174,28 @@ struct MealDetailView: View {
                 Button {
                     showingEdit = true
                 } label: {
-                    Label("Edit", systemImage: "pencil")
+                    Image(systemName: "pencil")
                         .foregroundColor(purple)
                 }
             }
         }
         .sheet(isPresented: $showingEdit) {
-            EditMealView(meal: currentMeal)
+            EditMealView(meal: currentMeal, onMealUpdated: {
+                dismiss()
+            })
         }
     }
 
     private var mealImage: some View {
 
         Group {
-
-            if let _ = UIImage(named: currentMeal.imageName) {
-
-                Image(currentMeal.imageName)
-                    .resizable()
-                    .scaledToFill()
-
-            } else {
-
-                Image(systemName: "fork.knife")
-                    .font(.system(size: 45))
-                    .foregroundColor(purple)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(
-                        Color(
-                            red: 0.95,
-                            green: 0.92,
-                            blue: 0.98
-                        )
-                    )
-            }
+            FoodThumbnailView(
+                imageName: currentMeal.imageName,
+                size: 210,
+                fontSize: 85,
+                cornerRadius: 18
+            )
+            .frame(maxWidth: .infinity)
         }
         .frame(height: 210)
         .frame(maxWidth: .infinity)

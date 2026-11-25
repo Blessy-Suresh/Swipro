@@ -4,10 +4,13 @@ struct HomeView: View {
 
     @EnvironmentObject private var store: MealPlannerStore
 
+    @AppStorage("registeredName") private var registeredName = ""
+
     var onOpenMeals: () -> Void
     var onAddMeal: () -> Void
 
     @State private var selectedMeal: MealPlanItem?
+    @State private var showLoginSuccessToast = true
 
     private let purple = Color(
         red: 0.43,
@@ -75,6 +78,32 @@ struct HomeView: View {
 
                 VStack(alignment: .leading, spacing: 24) {
 
+                    if showLoginSuccessToast {
+                        HStack(spacing: 10) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                                .font(.system(size: 18))
+
+                            Text("Login Successful")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.primary)
+
+                            Spacer()
+                        }
+                        .padding(14)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .shadow(color: Color.black.opacity(0.08), radius: 6, y: 3)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                                withAnimation(.easeInOut(duration: 0.5)) {
+                                    showLoginSuccessToast = false
+                                }
+                            }
+                        }
+                    }
+
                     headerSection
 
                     weeklyOverviewSection
@@ -106,15 +135,11 @@ struct HomeView: View {
 
         HStack {
 
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 4) {
 
-                Text("Good to see you!")
-                    .font(.system(size: 25, weight: .bold))
-                    .foregroundColor(Color.black.opacity(0.85))
-
-                Text("Your weekly meals, beautifully organized.")
-                    .font(.system(size: 13))
-                    .foregroundColor(.secondary)
+                Text("Welcome, \(registeredName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Chef" : registeredName.trimmingCharacters(in: .whitespacesAndNewlines))! 👋")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(Color.black.opacity(0.88))
             }
 
             Spacer()
@@ -148,18 +173,19 @@ struct HomeView: View {
 
             HStack(spacing: 12) {
 
-                Image(systemName: "calendar")
+                Image(systemName: "sparkles")
                     .font(.system(size: 24))
                     .foregroundColor(purple)
 
                 VStack(alignment: .leading, spacing: 4) {
 
-                    Text("Plan your week with ease")
+                    Text("Smart Meal Journey 🥗")
                         .font(.system(size: 15, weight: .semibold))
 
-                    Text("Keep your meals organized in one place.")
+                    Text("Eat healthy, cook fresh, and achieve your weekly goals effortlessly.")
                         .font(.system(size: 12))
                         .foregroundColor(.secondary)
+                        .lineSpacing(2)
                 }
 
                 Spacer()
@@ -321,9 +347,12 @@ struct HomeView: View {
 
                         HStack(spacing: 13) {
 
-                            Image(systemName: "fork.knife.circle.fill")
-                                .font(.system(size: 40))
-                                .foregroundColor(purple)
+                            FoodThumbnailView(
+                                imageName: meal.imageName,
+                                size: 50,
+                                fontSize: 28,
+                                cornerRadius: 12
+                            )
 
                             VStack(alignment: .leading, spacing: 5) {
 

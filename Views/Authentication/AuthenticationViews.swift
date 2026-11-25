@@ -7,6 +7,7 @@ struct AuthenticationViews: View {
     @AppStorage("isLoggedIn") private var isLoggedIn = false
 
     @State private var showSignup = false
+    @State private var signupSuccessMessage = ""
 
     var body: some View {
 
@@ -17,15 +18,31 @@ struct AuthenticationViews: View {
 
             } else if showSignup {
 
-                SignupView {
-                    showSignup = false
-                }
+                SignupView(
+                    onShowLogin: {
+                        signupSuccessMessage = ""
+                        showSignup = false
+                    },
+                    onSignupSuccess: {
+                        signupSuccessMessage = "Account created successfully! Please login."
+                        showSignup = false
+                    }
+                )
 
             } else {
 
-                LoginView {
-                    showSignup = true
-                }
+                LoginView(
+                    successMessage: signupSuccessMessage,
+                    onShowSignup: {
+                        signupSuccessMessage = ""
+                        showSignup = true
+                    }
+                )
+            }
+        }
+        .onChange(of: isLoggedIn) { _, newValue in
+            if newValue {
+                signupSuccessMessage = ""
             }
         }
     }

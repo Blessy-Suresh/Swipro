@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		AA01FD7D249552A6467D8854 /* FoodImageCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodImageCatalog.swift; sourceTree = "<group>"; };
+		AA03712F16E48C5B4A0A8959 /* FoodImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodImagePickerView.swift; sourceTree = "<group>"; };
 		000000000000000000000120 /* SWiproMeal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SWiproMeal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 

@@ -22,7 +22,7 @@ final class AuthViewModel: ObservableObject {
 
         if success {
             UserDefaults.standard.set(true, forKey: "biometricEnabled")
-            UserDefaults.standard.set(true, forKey: "isLoggedIn")
+            UserDefaults.standard.set(false, forKey: "isLoggedIn")
             errorMessage = ""
             return true
         }
@@ -60,6 +60,9 @@ final class AuthViewModel: ObservableObject {
         biometricService.authenticate { [weak self] success, error in
 
             if success {
+                if let registeredEmail = UserDefaults.standard.string(forKey: "registeredEmail") {
+                    UserDefaults.standard.set(registeredEmail, forKey: "loggedInEmail")
+                }
                 UserDefaults.standard.set(true, forKey: "isLoggedIn")
                 self?.errorMessage = ""
                 completion(true)

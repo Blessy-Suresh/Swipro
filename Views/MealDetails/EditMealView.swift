@@ -6,10 +6,14 @@ struct EditMealView: View {
     @Environment(\.dismiss) private var dismiss
 
     let meal: MealPlanItem
+    var onMealUpdated: (() -> Void)? = nil
 
     @State private var dishName: String
     @State private var selectedType: MealType
+    @State private var selectedImageName: String
+    @State private var showingImagePicker = false
     @State private var selectedDate: Date
+    @State private var showingDatePicker = false
     @State private var servings: Int
     @State private var status: MealPlanStatus
     @State private var notes: String
@@ -29,10 +33,12 @@ struct EditMealView: View {
         blue: 0.98
     )
 
-    init(meal: MealPlanItem) {
+    init(meal: MealPlanItem, onMealUpdated: (() -> Void)? = nil) {
         self.meal = meal
+        self.onMealUpdated = onMealUpdated
         _dishName = State(initialValue: meal.dishName)
         _selectedType = State(initialValue: MealType(rawValue: meal.mealType) ?? .lunch)
+        _selectedImageName = State(initialValue: meal.imageName.isEmpty ? "bread" : meal.imageName)
         _selectedDate = State(initialValue: meal.date)
         _servings = State(initialValue: meal.servings)
         _status = State(initialValue: meal.status)
@@ -47,6 +53,8 @@ struct EditMealView: View {
 
                 VStack(alignment: .leading, spacing: 20) {
 
+                    imageSelectionSection
+
                     dishNameSection
 
                     mealTypeSection
@@ -58,8 +66,6 @@ struct EditMealView: View {
                     servingsSection
 
                     notesSection
-
-                    saveButton
                 }
                 .padding(20)
                 .padding(.bottom, 25)
@@ -86,18 +92,66 @@ struct EditMealView: View {
                     .foregroundColor(purple)
                 }
             }
-            .alert("Meal Updated! 🎉", isPresented: $showingSuccess) {
+            .alert("Saved Successfully", isPresented: $showingSuccess) {
                 Button("OK", role: .cancel) {
                     dismiss()
+                    onMealUpdated?()
                 }
-            } message: {
-                Text("Your changes have been saved successfully.")
-            }
+            } message: { }
             .alert("Unable to Save", isPresented: $showingError) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Please enter a valid dish name and select valid servings.")
             }
+        }
+    }
+
+    // MARK: - Image Selection Section
+
+    private var imageSelectionSection: some View {
+
+        Button {
+            showingImagePicker = true
+        } label: {
+            HStack(spacing: 14) {
+                FoodThumbnailView(
+                    imageName: selectedImageName,
+                    size: 65,
+                    fontSize: 34,
+                    cornerRadius: 14
+                )
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(
+                        selectedImageName.isEmpty
+                        ? "Choose Meal"
+                        : (FoodImageCatalog.option(for: selectedImageName)?.name ?? "Selected Meal")
+                    )
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundColor(selectedImageName.isEmpty ? purple : .primary)
+
+                    Text(
+                        selectedImageName.isEmpty
+                        ? "Tap to select your favorite dish"
+                        : "Tap to change meal"
+                    )
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+            }
+            .padding(12)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showingImagePicker) {
+            FoodImagePickerView(selectedImageName: $selectedImageName)
         }
     }
 
@@ -172,29 +226,63 @@ struct EditMealView: View {
 
             sectionTitle("Choose Date", icon: "calendar")
 
-            HStack {
-                Text("Meal Date")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.primary)
+            Button {
+                showingDatePicker = true
+            } label: {
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundColor(purple)
 
-                Spacer()
+                    Text(selectedDate.formatted(date: .complete, time: .omitted))
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.primary)
 
-                DatePicker(
-                    "Meal Date",
-                    selection: $selectedDate,
-                    displayedComponents: .date
-                )
-                .datePickerStyle(.compact)
-                .labelsHidden()
-                .tint(purple)
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+                .padding(14)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
             }
-            .padding(14)
-            .background(Color.white)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .buttonStyle(.plain)
+        }
+        .sheet(isPresented: $showingDatePicker) {
+            NavigationStack {
+                VStack(spacing: 20) {
+                    DatePicker(
+                        "Meal Date",
+                        selection: Binding(
+                            get: { selectedDate },
+                            set: { newDate in
+                                selectedDate = Calendar.current.startOfDay(for: newDate)
+                                showingDatePicker = false
+                            }
+                        ),
+                        in: Calendar.current.startOfDay(for: Date())...,
+                        displayedComponents: .date
+                    )
+                    .datePickerStyle(.graphical)
+                    .tint(purple)
+                    .padding()
 
-            Text("Selected: " + selectedDate.formatted(date: .complete, time: .omitted))
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(purple)
+                    Spacer()
+                }
+                .navigationTitle("Select Date")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Done") {
+                            showingDatePicker = false
+                        }
+                        .foregroundColor(purple)
+                        .fontWeight(.bold)
+                    }
+                }
+            }
+            .presentationDetents([.medium])
         }
     }
 
@@ -271,6 +359,7 @@ struct EditMealView: View {
         var updated = meal
         updated.dishName = cleanName
         updated.mealType = selectedType.rawValue
+        updated.imageName = selectedImageName
         updated.date = selectedDate
         updated.servings = servings
         updated.status = status

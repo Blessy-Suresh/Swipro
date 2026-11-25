@@ -62,7 +62,7 @@ final class AuthenticationService {
 
         defaults.set(cleanName, forKey: "registeredName")
         defaults.set(cleanEmail, forKey: "registeredEmail")
-        defaults.set(cleanEmail, forKey: "loggedInEmail")
+        defaults.removeObject(forKey: "loggedInEmail")
         defaults.set(password, forKey: "registeredPassword")
         defaults.set(true, forKey: "hasAccount")
 

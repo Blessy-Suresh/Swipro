@@ -8,6 +8,8 @@ struct MealsView: View {
     @State private var selectedPeriod = "Today" // Defaults to Today, options: "Today", "Week"
     @State private var selectedMeal: MealPlanItem?
     @State private var mealToEdit: MealPlanItem?
+    @State private var mealToDelete: MealPlanItem?
+    @State private var showingDeleteAlert = false
 
     private let purple = Color(
         red: 0.43, green: 0.32, blue: 0.60
@@ -111,6 +113,19 @@ struct MealsView: View {
             }
             .sheet(item: $mealToEdit) { meal in
                 EditMealView(meal: meal)
+            }
+            .alert(
+                "Delete Meal?",
+                isPresented: $showingDeleteAlert
+            ) {
+                Button("Delete", role: .destructive) {
+                    if let meal = mealToDelete {
+                        store.deleteMeal(meal)
+                    }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Are you sure you want to delete this meal?")
             }
         }
     }
@@ -332,7 +347,8 @@ struct MealsView: View {
             }
 
             Button(role: .destructive) {
-                store.deleteMeal(meal)
+                mealToDelete = meal
+                showingDeleteAlert = true
             } label: {
                 Label("Delete Meal", systemImage: "trash")
             }
@@ -340,22 +356,12 @@ struct MealsView: View {
     }
 
     private func mealImage(_ name: String) -> some View {
-
-        Group {
-            if UIImage(named: name) != nil {
-                Image(name)
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                Image(systemName: "fork.knife")
-                    .font(.system(size: 24))
-                    .foregroundColor(purple)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(lavender)
-            }
-        }
-        .frame(width: 72, height: 72)
-        .clipShape(RoundedRectangle(cornerRadius: 11))
+        FoodThumbnailView(
+            imageName: name,
+            size: 72,
+            fontSize: 36,
+            cornerRadius: 11
+        )
     }
 
     private func statusBadge(_ status: MealPlanStatus) -> some View {

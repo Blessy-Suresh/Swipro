@@ -3,6 +3,7 @@ import SwiftUI
 struct MainTabView: View {
 
     @State private var selectedTab = 0
+    @AppStorage("loggedInEmail") private var loggedInEmail = ""
 
     @StateObject private var mealStore = MealPlannerStore()
 
@@ -35,11 +36,15 @@ struct MainTabView: View {
                 }
                 .tag(1)
 
-            AddMealView()
-                .tabItem {
-                    Label("Add", systemImage: "plus.circle")
+            AddMealView(
+                onMealSaved: {
+                    selectedTab = 1
                 }
-                .tag(2)
+            )
+            .tabItem {
+                Label("Add", systemImage: "plus.circle")
+            }
+            .tag(2)
 
             MealListView()
                 .tabItem {
@@ -56,6 +61,9 @@ struct MainTabView: View {
         .tint(purple)
         .environmentObject(mealStore)
         .onAppear {
+            mealStore.reloadForCurrentUser()
+        }
+        .onChange(of: loggedInEmail) { _, _ in
             mealStore.reloadForCurrentUser()
         }
     }

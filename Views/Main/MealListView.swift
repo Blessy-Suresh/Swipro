@@ -7,7 +7,8 @@ struct MealListView: View {
 
     @State private var searchText = ""
     @State private var selectedMeal: MealPlanItem?
-    @State private var mealToEdit: MealPlanItem?
+    @State private var mealToDelete: MealPlanItem?
+    @State private var showingDeleteAlert = false
 
     private let purple = Color(
         red: 0.43, green: 0.32, blue: 0.60
@@ -119,8 +120,18 @@ struct MealListView: View {
                     MealDetailView(meal: meal)
                 }
             }
-            .sheet(item: $mealToEdit) { meal in
-                EditMealView(meal: meal)
+            .alert(
+                "Delete Meal?",
+                isPresented: $showingDeleteAlert
+            ) {
+                Button("Delete", role: .destructive) {
+                    if let meal = mealToDelete {
+                        store.deleteMeal(meal)
+                    }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Are you sure you want to delete this meal?")
             }
         }
     }
@@ -152,21 +163,12 @@ struct MealListView: View {
 
             HStack(spacing: 12) {
 
-                Group {
-                    if UIImage(named: meal.imageName) != nil {
-                        Image(meal.imageName)
-                            .resizable()
-                            .scaledToFill()
-                    } else {
-                        Image(systemName: "fork.knife")
-                            .font(.system(size: 23))
-                            .foregroundColor(purple)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(lavender)
-                    }
-                }
-                .frame(width: 68, height: 68)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                FoodThumbnailView(
+                    imageName: meal.imageName,
+                    size: 68,
+                    fontSize: 34,
+                    cornerRadius: 10
+                )
 
                 VStack(alignment: .leading, spacing: 6) {
 
@@ -189,16 +191,6 @@ struct MealListView: View {
 
                 Spacer()
 
-                // Direct edit button
-                Button {
-                    mealToEdit = meal
-                } label: {
-                    Image(systemName: "pencil.circle.fill")
-                        .font(.system(size: 22))
-                        .foregroundColor(purple)
-                }
-                .buttonStyle(.borderless)
-
                 Image(systemName: "chevron.right")
                     .foregroundColor(.secondary)
                     .font(.caption)
@@ -209,14 +201,9 @@ struct MealListView: View {
         }
         .buttonStyle(.plain)
         .contextMenu {
-            Button {
-                mealToEdit = meal
-            } label: {
-                Label("Edit Meal", systemImage: "pencil")
-            }
-
             Button(role: .destructive) {
-                store.deleteMeal(meal)
+                mealToDelete = meal
+                showingDeleteAlert = true
             } label: {
                 Label("Delete Meal", systemImage: "trash")
             }

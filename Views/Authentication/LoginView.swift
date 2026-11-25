@@ -4,6 +4,7 @@ struct LoginView: View {
 
     @StateObject private var viewModel = AuthViewModel()
 
+    var successMessage: String = ""
     var onShowSignup: () -> Void
 
     var body: some View {
@@ -21,8 +22,12 @@ struct LoginView: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
 
-            Text("Welcome back to MealMate")
-                .foregroundColor(.secondary)
+            if !successMessage.isEmpty && viewModel.errorMessage.isEmpty {
+                Text(successMessage)
+                    .foregroundColor(.green)
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+            }
 
             TextField("Email or Username", text: $viewModel.email)
                 .keyboardType(.emailAddress)

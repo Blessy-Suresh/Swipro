@@ -86,6 +86,7 @@ struct ProfileView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
 
                     Button {
+                        UserDefaults.standard.removeObject(forKey: "loggedInEmail")
                         isLoggedIn = false
                     } label: {
 

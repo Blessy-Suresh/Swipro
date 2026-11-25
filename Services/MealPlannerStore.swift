@@ -9,9 +9,7 @@ final class MealPlannerStore: ObservableObject {
     @Published private(set) var meals: [MealPlanItem] = []
 
     private var currentUserEmail: String {
-        let email = UserDefaults.standard.string(forKey: "loggedInEmail") ??
-                    UserDefaults.standard.string(forKey: "registeredEmail") ??
-                    "default_user"
+        let email = UserDefaults.standard.string(forKey: "loggedInEmail") ?? "default_user"
         let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         return trimmed.isEmpty ? "default_user" : trimmed
     }
@@ -19,8 +17,6 @@ final class MealPlannerStore: ObservableObject {
     private var storageKey: String {
         "MealMateSavedMeals_\(currentUserEmail)"
     }
-
-    private let legacyStorageKey = "MealMateSavedMeals"
 
     // MARK: - Initialization
 
@@ -232,11 +228,8 @@ final class MealPlannerStore: ObservableObject {
             let encoder = JSONEncoder()
             let data = try encoder.encode(meals)
 
-            // Save to user-specific key
+            // Save only to the active user's key so meals never leak across accounts
             UserDefaults.standard.set(data, forKey: storageKey)
-
-            // Save to legacy key as well for redundancy
-            UserDefaults.standard.set(data, forKey: legacyStorageKey)
 
         } catch {
             print("Meal saving failed: \(error.localizedDescription)")
@@ -249,30 +242,12 @@ final class MealPlannerStore: ObservableObject {
 
         let decoder = JSONDecoder()
 
-        // 1. Try user-specific storage key
         if let data = UserDefaults.standard.data(forKey: storageKey) {
             do {
-                let savedMeals = try decoder.decode([MealPlanItem].self, from: data)
-                if !savedMeals.isEmpty {
-                    meals = savedMeals
-                    return
-                }
+                meals = try decoder.decode([MealPlanItem].self, from: data)
+                return
             } catch {
                 print("User meal decoding error: \(error)")
-            }
-        }
-
-        // 2. Fallback to legacy key (migrate)
-        if let legacyData = UserDefaults.standard.data(forKey: legacyStorageKey) {
-            do {
-                let savedMeals = try decoder.decode([MealPlanItem].self, from: legacyData)
-                if !savedMeals.isEmpty {
-                    meals = savedMeals
-                    saveMeals()
-                    return
-                }
-            } catch {
-                print("Legacy meal decoding error: \(error)")
             }
         }
 

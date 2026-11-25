@@ -6,6 +6,7 @@ struct SignupView: View {
     @StateObject private var viewModel = AuthViewModel()
 
     var onShowLogin: () -> Void
+    var onSignupSuccess: (() -> Void)? = nil
 
     var body: some View {
 
@@ -81,7 +82,13 @@ struct SignupView: View {
 
                 // Create Account Button
                 Button {
-                    _ = viewModel.signUp()
+                    if viewModel.signUp() {
+                        if let onSignupSuccess {
+                            onSignupSuccess()
+                        } else {
+                            onShowLogin()
+                        }
+                    }
                 } label: {
                     Text("Create Account")
                         .font(.headline)

@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct SplashView: View {
@@ -7,19 +6,19 @@ struct SplashView: View {
 
     var body: some View {
         ZStack {
+            // Soft lavender background matching the screenshot
             Color(red: 0.94, green: 0.91, blue: 1.0)
                 .ignoresSafeArea()
 
-            VStack(spacing: 20) {
-
+            VStack(spacing: 22) {
                 Image("AppLogo")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 150, height: 150)
+                    .frame(width: 155, height: 155)
 
-                Text("Your Personal Meal Planner")
-                    .font(.title3)
-                    .foregroundColor(.gray)
+                Text("Eat Food • Feel Good")
+                    .font(.system(size: 19, weight: .semibold, design: .rounded))
+                    .foregroundColor(Color(red: 0.45, green: 0.38, blue: 0.60))
             }
         }
         .onAppear {
